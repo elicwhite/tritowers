@@ -27,7 +27,7 @@ $(function() {
                 ele.className = "cell";
                 ele.row = row;
                 ele.col = col;
-                ele.id = ele.row+"-"+ele.col;
+                ele.id = ele.row + "-" + ele.col;
                 ele.onclick = cellClicked;
                 $(line).append(ele);
                 matrix[row][col] = ele;
@@ -39,10 +39,21 @@ $(function() {
     }
 
     function cellClicked() {
+        // Reset all the classes
+        var lines = document.getElementById("box").childNodes;
+        for (var i = 0; i < lines.length; i++) {
+            for (var j = 0; j < lines[i].childNodes.length; j++) {
+                lines[i].childNodes[j].className = "cell";
+            }
+
+        }
+
         // Navigate to this cell
         var path = astar(this);
-        console.log(path);
 
+        path.forEach(function(item) {
+            $(document.getElementById(item)).addClass("path");
+        });
     }
 
     // navigate to cell from currentCell
@@ -67,7 +78,7 @@ $(function() {
         while (!openSet.isEmpty()) {
             var current = openSet.dequeue();
             // style the ones we've processed
-            $(current).addClass("current");
+            $(current).addClass("checked");
             if (current == goal) {
                 return reconstructPath(cameFrom, goal.id);
             }
