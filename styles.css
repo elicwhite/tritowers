@@ -26,3 +26,7 @@
 .path {
     background-color: #acd;
 }
+
+.cell[data-type="block"] {
+    background-color: black;
+}

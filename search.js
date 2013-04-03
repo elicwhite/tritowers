@@ -18,6 +18,10 @@ $(function() {
 
         pathFinding = new AStar(matrix);
 
+
+        // Chance of each cell being a block when we want 40 on the board
+        var chance = 40/ (rows*cols);
+
         for (var row = 0; row < rows; row++) {
             matrix[row] = [];
             var line = document.createElement("div");
@@ -29,6 +33,12 @@ $(function() {
                 ele.row = row;
                 ele.col = col;
                 ele.id = ele.row + "-" + ele.col;
+
+                // we want roughly 40 blocks.
+                if (Math.random() < chance) {
+                    ele.dataset.type = "block";
+                }
+
                 ele.onclick = cellClicked;
                 $(line).append(ele);
                 matrix[row][col] = ele;
