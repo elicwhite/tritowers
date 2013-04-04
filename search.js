@@ -12,14 +12,11 @@ $(function() {
     handleControls();
 
     var matrix = buildBoard(rows, cols);
-    setBlocks(blocks);
 
     var currentCell = matrix[0][0];
     var goal;
 
     var currentType = "search";
-
-
 
     function buildBoard(rows, cols) {
         var matrix = [];
@@ -54,7 +51,7 @@ $(function() {
 
     function cellClicked() {
         if (currentType == "block") {
-            if (this.dataset.type == "block") {
+            if (this.dataset.type != "free") {
                 this.dataset.type = "free";
             } else {
                 this.dataset.type = "block";
@@ -62,14 +59,40 @@ $(function() {
 
             // Recalculate the path to the goal
             if (goal) {
-                pathFind(goal);
+                if (!pathFind(goal)) {
+                    console.log("You can't go there!");
+                    this.dataset.type = "free";
+                    pathFind(goal);
+                }
             }
+
+            // path was found, merge neighbors
+            var third = isThird(this);
+            if (third[0]) {
+                // Clear all the elements
+                for(var i = 0; i < third[1].length; i++) {
+                    // Don't change the clicked item
+                    if (third[1][i] != this) {
+                        third[1][i].dataset.type="free";
+                    }
+                }
+
+                // Now that we've cleared stuff, pathfind again
+                if (goal) {
+                    pathFind(goal);
+                }
+            }
+
+
+
         } else if (currentType == "search") {
             // Navigate to this cell
             goal = this;
             pathFind(goal);
         }
     }
+
+    // Returns true if a path was found. False otherwise
 
     function pathFind(goal) {
         // Reset all the classes
@@ -82,11 +105,12 @@ $(function() {
 
         var path = pathFinding.findPath(currentCell, goal);
         if (!path) {
-            console.log("No Path!");
+            return false;
         } else {
             path.forEach(function(item) {
                 $(document.getElementById(item)).addClass("path");
             });
+            return true;
         }
     }
 
@@ -94,34 +118,39 @@ $(function() {
         $("input[name='inputType']").change(function() {
             currentType = this.value;
         });
-
-        document.getElementById("regenerate").addEventListener("click", (function() {
-            setBlocks(blocks);
-
-            if (goal) {
-                pathFind(goal);
-            }
-        }));
     }
 
-    function setBlocks(blocks) {
-        // Clear the blocks from the board
-        var lines = document.getElementById("box").childNodes;
-        for (var i = 0; i < lines.length; i++) {
-            for (var j = 0; j < lines[i].childNodes.length; j++) {
-                lines[i].childNodes[j].dataset.type = "free";
+    // Looks at it's neighbors to find out if it's the third
+    // of it's type connected
+
+    function isThird(ele) {
+        var result = isThirdHelper([ele], []);
+        return [result.length >= 3, result];
+
+    }
+
+    function isThirdHelper(openSet, closedSet) {
+        // put Ele in scope for the filter
+        var ele;
+        // Add ele to a new closed set
+        while (openSet.length > 0) {
+            ele = openSet.pop();
+            closedSet.push(ele);
+
+            // Get all the neighbors that aren't in the closed set, and are of the same type
+            var neighbors = pathFinding.getNeighbors(ele).filter(filter);
+
+            for (var i = 0; i < neighbors.length; i++) {
+                openSet.push(neighbors[i]);
             }
         }
 
-        for (i = 0; i < blocks; i++) {
-            var row = random(0, rows - 1);
-            var col = random(0, cols - 1);
+        return closedSet;
 
-            matrix[row][col].dataset.type = "block";
+        function filter(element) {
+            return (closedSet.indexOf(element) == -1 && element.dataset.type == ele.dataset.type);
         }
     }
 
-    function random(min, max) {
-        return Math.floor(Math.random() * (max - min + 1) + min);
-    }
+
 });

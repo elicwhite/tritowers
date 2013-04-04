@@ -22,14 +22,13 @@ function AStar(board) {
 		while (!openSet.isEmpty()) {
 			var current = openSet.dequeue();
 			// style the ones we've processed
-			$(current).addClass("checked");
 			if (current == goal) {
 				return reconstructPath(cameFrom, goal.id);
 			}
 
 			closedSet.push(current);
 
-			var neighbors = getNeighbors(current);
+			var neighbors = this.getNeighbors(current).filter(neighborFilter);
 
 			for (var i = 0; i < neighbors.length; i++) {
 				var neighbor = neighbors[i];
@@ -54,21 +53,7 @@ function AStar(board) {
 		return false;
 	};
 
-	function manhattan_distance(start, goal) {
-		var dist = Math.abs(goal.row - start.row) + Math.abs(goal.col - start.col);
-		return dist;
-	}
-
-	function reconstructPath(cameFrom, currentId) {
-		if (currentId in cameFrom) {
-			var p = reconstructPath(cameFrom, cameFrom[currentId]);
-			p.push(currentId);
-			return p;
-		}
-		return [currentId];
-	}
-
-	function getNeighbors(cell) {
+	this.getNeighbors = function(cell) {
 		var neighbors = [];
 
 		// check neighbors
@@ -93,8 +78,24 @@ function AStar(board) {
 			neighbors.push(matrix[cell.row + 1][cell.col]);
 		}
 
-		return neighbors.filter(function(element) {
-			return (element.dataset.type != "block");
-		});
+		return neighbors;
+	};
+
+	function neighborFilter(element) {
+		return (element.dataset.type != "block");
+	}
+
+	function manhattan_distance(start, goal) {
+		var dist = Math.abs(goal.row - start.row) + Math.abs(goal.col - start.col);
+		return dist;
+	}
+
+	function reconstructPath(cameFrom, currentId) {
+		if (currentId in cameFrom) {
+			var p = reconstructPath(cameFrom, cameFrom[currentId]);
+			p.push(currentId);
+			return p;
+		}
+		return [currentId];
 	}
 }
