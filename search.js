@@ -55,6 +55,7 @@ $(function() {
                 this.dataset.type = "free";
             } else {
                 this.dataset.type = "block";
+                this.dataset.level = 1;
             }
 
             // Recalculate the path to the goal
@@ -68,12 +69,16 @@ $(function() {
 
             // path was found, merge neighbors
             var third = isThird(this);
-            if (third[0]) {
+
+            // Make sure we keep checking while we change things
+            while (third[0]) {
                 // Clear all the elements
-                for(var i = 0; i < third[1].length; i++) {
+                for (var i = 0; i < third[1].length; i++) {
                     // Don't change the clicked item
-                    if (third[1][i] != this) {
-                        third[1][i].dataset.type="free";
+                    if (third[1][i] == this) {
+                        this.dataset.level++;
+                    } else {
+                        third[1][i].dataset.type = "free";
                     }
                 }
 
@@ -81,6 +86,8 @@ $(function() {
                 if (goal) {
                     pathFind(goal);
                 }
+
+                third = isThird(this);
             }
 
 
@@ -148,7 +155,7 @@ $(function() {
         return closedSet;
 
         function filter(element) {
-            return (closedSet.indexOf(element) == -1 && element.dataset.type == ele.dataset.type);
+            return ((closedSet.indexOf(element) == -1) && (element.dataset.type == ele.dataset.type) && (element.dataset.level == ele.dataset.level));
         }
     }
 

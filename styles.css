@@ -9,6 +9,8 @@
     width: 20px;
     height: 20px;
     float: left;
+    text-align: center;
+    color: white;
 }
 
 .cell:hover {
@@ -36,4 +38,8 @@
 .controls label 
 {
     clear: both;
+}
+
+.cell[data-type="block"][data-level]:before {
+    content:attr(data-level);
 }
