@@ -19,11 +19,12 @@ will turn into one of a higher level and the rest will go away.
     <div id="box">
 
     </div>
+    <!--
     <div class="controls">
         <fieldset>
             <label>Block <input type="radio" name="inputType" value="block"></label>
-            <label>Search <input type="radio" name="inputType" value="search" checked="checked"></label>
         </fieldset>
     </div>
+    -->
 </body>
 </html>

@@ -9,14 +9,11 @@ $(function() {
     // How many blocks we will have on the page
     var blocks = 100;
 
-    handleControls();
-
     var matrix = buildBoard(rows, cols);
 
     var currentCell = matrix[0][0];
-    var goal;
-
-    var currentType = "search";
+    var goal = matrix[rows - 1][cols - 1];
+    pathFind();
 
     function buildBoard(rows, cols) {
         var matrix = [];
@@ -50,59 +47,47 @@ $(function() {
     }
 
     function cellClicked() {
-        if (currentType == "block") {
-            // You can only place a block where there is no block already
-            if (this.dataset.type != "free") {
-                return;
-            } else {
-                this.dataset.type = "block";
-                this.dataset.level = 1;
-            }
+        // You can only place a block where there is no block already
+        if (this.dataset.type != "free") {
+            return;
+        } else {
+            this.dataset.type = "block";
+            this.dataset.level = 1;
+        }
 
-            // Recalculate the path to the goal
-            if (goal) {
-                if (!pathFind(goal)) {
-                    console.log("You can't go there!");
-                    this.dataset.type = "free";
-                    pathFind(goal);
+        // Recalculate the path to the goal
+        if (!pathFind()) {
+            console.log("You can't go there!");
+            this.dataset.type = "free";
+            pathFind();
+        }
+
+
+        // path was found, merge neighbors
+        var third = isThird(this);
+
+        // Make sure we keep checking while we change things
+        while (third[0]) {
+            // Clear all the elements
+            for (var i = 0; i < third[1].length; i++) {
+                // Don't change the clicked item
+                if (third[1][i] == this) {
+                    this.dataset.level++;
+                } else {
+                    third[1][i].dataset.type = "free";
                 }
             }
 
-            // path was found, merge neighbors
-            var third = isThird(this);
+            // Now that we've cleared stuff, pathfind again
+            pathFind();
 
-            // Make sure we keep checking while we change things
-            while (third[0]) {
-                // Clear all the elements
-                for (var i = 0; i < third[1].length; i++) {
-                    // Don't change the clicked item
-                    if (third[1][i] == this) {
-                        this.dataset.level++;
-                    } else {
-                        third[1][i].dataset.type = "free";
-                    }
-                }
-
-                // Now that we've cleared stuff, pathfind again
-                if (goal) {
-                    pathFind(goal);
-                }
-
-                third = isThird(this);
-            }
-
-
-
-        } else if (currentType == "search") {
-            // Navigate to this cell
-            goal = this;
-            pathFind(goal);
+            third = isThird(this);
         }
     }
 
     // Returns true if a path was found. False otherwise
 
-    function pathFind(goal) {
+    function pathFind() {
         // Reset all the classes
         var lines = document.getElementById("box").childNodes;
         for (var i = 0; i < lines.length; i++) {
@@ -120,12 +105,6 @@ $(function() {
             });
             return true;
         }
-    }
-
-    function handleControls() {
-        $("input[name='inputType']").change(function() {
-            currentType = this.value;
-        });
     }
 
     // Looks at it's neighbors to find out if it's the third
