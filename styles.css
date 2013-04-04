@@ -30,3 +30,14 @@
 .cell[data-type="block"] {
     background-color: black;
 }
+
+.controls
+{
+    clear: both;
+    float: left;
+}
+
+.controls label 
+{
+    clear: both;
+}

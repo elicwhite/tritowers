@@ -12,5 +12,12 @@
     <div id="box">
 
     </div>
+    <div class="controls">
+        <fieldset>
+            <label>Block <input type="radio" name="inputType" value="block"></label>
+            <label>Search <input type="radio" name="inputType" value="search" checked="checked"></label>
+            <button id="regenerate">Regenerate Board</button>
+        </fieldset>
+    </div>
 </body>
 </html>

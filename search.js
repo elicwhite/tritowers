@@ -1,15 +1,25 @@
 goog.require('goog.structs.PriorityQueue');
 
 $(function() {
+    var pathFinding;
 
     var rows = "20";
     var cols = "30";
 
+    // How many blocks we will have on the page
+    var blocks = 100;
+
+    handleControls();
+
     var matrix = buildBoard(rows, cols);
+    setBlocks(blocks);
 
     var currentCell = matrix[0][0];
+    var goal;
 
-    var pathFinding;
+    var currentType = "search";
+
+
 
     function buildBoard(rows, cols) {
         var matrix = [];
@@ -17,10 +27,6 @@ $(function() {
         var box = document.getElementById("box");
 
         pathFinding = new AStar(matrix);
-
-
-        // Chance of each cell being a block when we want 40 on the board
-        var chance = 40/ (rows*cols);
 
         for (var row = 0; row < rows; row++) {
             matrix[row] = [];
@@ -34,10 +40,7 @@ $(function() {
                 ele.col = col;
                 ele.id = ele.row + "-" + ele.col;
 
-                // we want roughly 40 blocks.
-                if (Math.random() < chance) {
-                    ele.dataset.type = "block";
-                }
+                ele.dataset.type = "free";
 
                 ele.onclick = cellClicked;
                 $(line).append(ele);
@@ -50,6 +53,25 @@ $(function() {
     }
 
     function cellClicked() {
+        if (currentType == "block") {
+            if (this.dataset.type == "block") {
+                this.dataset.type = "free";
+            } else {
+                this.dataset.type = "block";
+            }
+
+            // Recalculate the path to the goal
+            if (goal) {
+                pathFind(goal);
+            }
+        } else if (currentType == "search") {
+            // Navigate to this cell
+            goal = this;
+            pathFind(goal);
+        }
+    }
+
+    function pathFind(goal) {
         // Reset all the classes
         var lines = document.getElementById("box").childNodes;
         for (var i = 0; i < lines.length; i++) {
@@ -58,11 +80,48 @@ $(function() {
             }
         }
 
-        // Navigate to this cell
-        var path = pathFinding.findPath(currentCell, this);
+        var path = pathFinding.findPath(currentCell, goal);
+        if (!path) {
+            console.log("No Path!");
+        } else {
+            path.forEach(function(item) {
+                $(document.getElementById(item)).addClass("path");
+            });
+        }
+    }
 
-        path.forEach(function(item) {
-            $(document.getElementById(item)).addClass("path");
+    function handleControls() {
+        $("input[name='inputType']").change(function() {
+            currentType = this.value;
         });
+
+        document.getElementById("regenerate").addEventListener("click", (function() {
+            setBlocks(blocks);
+
+            if (goal) {
+                pathFind(goal);
+            }
+        }));
+    }
+
+    function setBlocks(blocks) {
+        // Clear the blocks from the board
+        var lines = document.getElementById("box").childNodes;
+        for (var i = 0; i < lines.length; i++) {
+            for (var j = 0; j < lines[i].childNodes.length; j++) {
+                lines[i].childNodes[j].dataset.type = "free";
+            }
+        }
+
+        for (i = 0; i < blocks; i++) {
+            var row = random(0, rows - 1);
+            var col = random(0, cols - 1);
+
+            matrix[row][col].dataset.type = "block";
+        }
+    }
+
+    function random(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
     }
 });
