@@ -51,8 +51,9 @@ $(function() {
 
     function cellClicked() {
         if (currentType == "block") {
+            // You can only place a block where there is no block already
             if (this.dataset.type != "free") {
-                this.dataset.type = "free";
+                return;
             } else {
                 this.dataset.type = "block";
                 this.dataset.level = 1;
