@@ -9,7 +9,7 @@ $(function() {
     b.initialize(cellClicked);
     var matrix = b.getMatrix();
 
-    var creep = new Creep(matrix);
+    var creep = new Creep(b);
     var foo = "bar";
     //var currentCell = matrix[0][0];
     var goal = matrix[rows - 1][cols - 1];

@@ -35,7 +35,7 @@ function Board(rows, cols, startRow, startCol, endRow, endCol) {
 			$(box).append(line);
 		}
 
-		pathFinding = new AStar(matrix);
+		pathFinding = new AStar(this);
 	};
 
 	this.getMatrix = function() {

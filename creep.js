@@ -1,7 +1,8 @@
-function Creep(matrix) {
+function Creep(board) {
 	"use strict";
+	var matrix = board.getMatrix();
 
-	var pathFinding = new AStar(matrix);
+	var pathFinding = new AStar(board);
 	var ele;
 
 	var callback;
@@ -31,19 +32,12 @@ function Creep(matrix) {
 		$(box).append(ele);
 
 		stop();
-
-		//ele.dataset.loc = startRow + "-" + startCol;
-
-		
 	};
-
-	
-
 	this.stop = function() {
 		console.log("stopping");
 		path = [];
 		clearTimeout(timeout);
-		ele.removeEventListener('webkitTransitionEnd',transitionEnd);
+		ele.removeEventListener('webkitTransitionEnd', transitionEnd);
 	};
 
 	this.start = function() {

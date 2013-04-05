@@ -1,8 +1,6 @@
 function AStar(board) {
 	"use strict";
 
-	var matrix = board;
-
 	this.findPath = function(start, goal) {
 
 		var closedSet = [];
@@ -28,7 +26,7 @@ function AStar(board) {
 
 			closedSet.push(current);
 
-			var neighbors = this.getNeighbors(current).filter(neighborFilter);
+			var neighbors = board.getNeighbors(current).filter(neighborFilter);
 
 			for (var i = 0; i < neighbors.length; i++) {
 				var neighbor = neighbors[i];
@@ -51,34 +49,6 @@ function AStar(board) {
 		}
 
 		return false;
-	};
-
-	this.getNeighbors = function(cell) {
-		var neighbors = [];
-
-		// check neighbors
-
-		// top
-		if (cell.row - 1 >= 0) {
-			neighbors.push(matrix[cell.row - 1][cell.col]);
-		}
-
-		// left
-		if (cell.col - 1 >= 0) {
-			neighbors.push(matrix[cell.row][cell.col - 1]);
-		}
-
-		// right
-		if (cell.col + 1 < matrix[0].length) {
-			neighbors.push(matrix[cell.row][cell.col + 1]);
-		}
-
-		// bottom
-		if (cell.row + 1 < matrix.length) {
-			neighbors.push(matrix[cell.row + 1][cell.col]);
-		}
-
-		return neighbors;
 	};
 
 	function neighborFilter(element) {
