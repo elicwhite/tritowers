@@ -1,4 +1,5 @@
 function Creep(board) {
+	"use strict";
 
 	var matrix = board;
 	var path;
@@ -9,6 +10,9 @@ function Creep(board) {
 	$(box).append(ele);
 
 	var timeout;
+
+	var transX = 0;
+	var transY = 0;
 
 	this.animate = function(directions) {
 		path = directions;
@@ -35,37 +39,21 @@ function Creep(board) {
 		var current = ele.dataset.loc.split("-");
 		var nextParts = next.split("-");
 
-		var direction = "";
-		if (current[0] < next[0]) {
-			direction = "down";
+		if (current[0] < nextParts[0]) {
+			transY += 20;
 		} else if (current[0] > nextParts[0]) {
-			direction = "up";
+			transY -= 20;
 		} else if (current[1] < nextParts[1]) {
-			direction = "right";
+			transX += 20;
 		} else {
-			direction = "left";
+			transX -= 20;
 		}
 
+		var transform = "translate(" + transX + "px, " + transY + "px)";
+		ele.style.webkitTransform = transform;
 		ele.dataset.loc = next;
+		console.log("moving to: "+next);
 
-		move(direction);
-		console.log(next);
-	}
-
-	function move(direction) {
-		var transform = "";
-		if (direction == "down") {
-			transform = "0px, 20px";
-		} else if (direction == "up") {
-			transform = "0px, -20px";
-		} else if (direction == "right") {
-			transform = "20px, 0px";
-		} else {
-			transform = "-20px, 0px";
-		}
-
-		ele.style.webkitTransform = "translate("+transform+")";
-		console.log("moving!");
 		timeout = setTimeout(moveToNext, 1000);
 	}
 }
