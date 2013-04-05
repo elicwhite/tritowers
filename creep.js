@@ -49,7 +49,7 @@ function Creep(board) {
 			transX -= 20;
 		}
 
-		var transform = "translate(" + transX + "px, " + transY + "px)";
+		var transform = "translate3d(" + transX + "px, " + transY + "px, 0px)";
 		ele.style.webkitTransform = transform;
 		ele.dataset.loc = next;
 		console.log("moving to: "+next);
