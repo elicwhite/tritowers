@@ -26,7 +26,7 @@ function Creep(board) {
 		var startEle = document.getElementById(start);
 		ele.dataset.loc = start;
 
-		$(ele).addClass("moveDown");
+		//$(ele).addClass("moveDown");
 		$(startEle).append(ele);
 
 		var next = path[0];
