@@ -1,8 +1,6 @@
 goog.require('goog.structs.PriorityQueue');
 
 $(function() {
-    var pathFinding;
-
     var rows = "10"; //20";
     var cols = "10"; //30";
 
@@ -12,18 +10,23 @@ $(function() {
     var matrix = buildBoard(rows, cols);
     var creep = new Creep(matrix);
 
-    var currentCell = matrix[0][0];
+    //var currentCell = matrix[0][0];
     var goal = matrix[rows - 1][cols - 1];
-    pathFind();
 
+    setCreep();
+
+
+    function setCreep() {
+        // Put the creep at top left
+        creep.initialize(0, 0, goal, setCreep);
+        creep.pathFind();
+    }
 
 
     function buildBoard(rows, cols) {
         var matrix = [];
 
         var box = document.getElementById("box");
-
-        pathFinding = new AStar(matrix);
 
         for (var row = 0; row < rows; row++) {
             matrix[row] = [];
@@ -38,6 +41,10 @@ $(function() {
                 ele.id = ele.row + "-" + ele.col;
 
                 ele.dataset.type = "free";
+                if (row === 0 && col == 9) {
+                    ele.dataset.type = "block";
+                    ele.dataset.level = 1;
+                }
 
                 ele.onclick = cellClicked;
                 $(line).append(ele);
@@ -58,11 +65,13 @@ $(function() {
             this.dataset.level = 1;
         }
 
+        creep.stop();
+
         // Recalculate the path to the goal
-        if (!pathFind()) {
+        if (!creep.pathFind()) {
             console.log("You can't go there!");
             this.dataset.type = "free";
-            pathFind();
+            creep.pathFind();
         }
 
 
@@ -82,33 +91,9 @@ $(function() {
             }
 
             // Now that we've cleared stuff, pathfind again
-            pathFind();
+            creep.pathFind();
 
             third = isThird(this);
-        }
-    }
-
-    // Returns true if a path was found. False otherwise
-
-    function pathFind() {
-        // Reset all the classes
-        var lines = document.getElementById("box").childNodes;
-        for (var i = 0; i < lines.length; i++) {
-            for (var j = 0; j < lines[i].childNodes.length; j++) {
-                lines[i].childNodes[j].className = "cell";
-            }
-        }
-
-        var path = pathFinding.findPath(currentCell, goal);
-        if (!path) {
-            return false;
-        } else {
-            path.forEach(function(item) {
-                $(document.getElementById(item)).addClass("path");
-            });
-
-            creep.animate(path);
-            return true;
         }
     }
 
