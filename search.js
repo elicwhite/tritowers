@@ -10,16 +10,17 @@ $(function() {
 
     var b = new Board(10, 10, start, goal);
     b.initialize(cellClicked);
+    b.hasPath();
 
     var creep = new Creep(b);
 
     setCreep();
 
 
-    function setCreep() { 
+    function setCreep() {
         // Put the creep at top left
         creep.initialize(start, goal, setCreep);
-        console.log("haspath: "+creep.pathFind());
+        console.log("haspath: " + creep.pathFind());
         creep.start();
     }
 

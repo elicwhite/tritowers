@@ -101,6 +101,15 @@ function Board(rows, cols, start, goal) {
 		if (!path) {
 			return false;
 		} else {
+			
+			// Reset all the classes
+			var lines = document.getElementById("box").childNodes;
+			for (var i = 0; i < lines.length; i++) {
+				for (var j = 0; j < lines[i].childNodes.length; j++) {
+					lines[i].childNodes[j].className = "cell";
+				}
+			}
+
 			path.forEach(function(item) {
 				$(document.getElementById(item)).addClass("path");
 			});
