@@ -48,7 +48,6 @@ function Creep(board) {
 		ele.addEventListener('webkitTransitionEnd', transitionEnd);
 		if (path) {
 			// Quick delay to render
-			path.shift();
 			setTimeout(moveToNext, 0);
 		}
 	};
@@ -68,10 +67,11 @@ function Creep(board) {
 	this.destroy = function() {
 		this.stop();
 		ele.parentNode.removeChild(ele);
-	}
+	};
 
 	function moveToNext() {
-		var next = path.shift();
+		var current = path.shift();
+		var next = path[0];
 
 		// no more items in path
 		if (!next) {
@@ -80,20 +80,39 @@ function Creep(board) {
 			return;
 		}
 
+		// We only want to set the row and col
+		// variables after we have moved somewhere.
+		// Otherwise we can move fast if this fn is called
+		// repeatedly.
+
+		var curParts = current.split("-");
 		var nextParts = next.split("-");
 
-		if (row < nextParts[0]) {
+		if (row < curParts[0]) {
 			row += 1;
-		} else if (row > nextParts[0]) {
+		} else if (row > curParts[0]) {
 			row -= 1;
-		} else if (col < nextParts[1]) {
+		} else if (col < curParts[1]) {
 			col += 1;
-		} else {
+		} else if (col > curParts[1]) {
 			col -= 1;
 		}
 
+		var tempRow = row;
+		var tempCol = col;
 
-		var transform = "translate3d(" + (col * 20) + "px, " + (row * 20) + "px, 0px)";
+		if (row < nextParts[0]) {
+			tempRow += 1;
+		} else if (row > nextParts[0]) {
+			tempRow -= 1;
+		} else if (col < nextParts[1]) {
+			tempCol += 1;
+		} else if (col > nextParts[1]) {
+			tempCol -= 1;
+		}
+
+
+		var transform = "translate3d(" + (tempCol * 20) + "px, " + (tempRow * 20) + "px, 0px)";
 		ele.style.webkitTransform = transform;
 		//console.log("moving to: " + next);
 
