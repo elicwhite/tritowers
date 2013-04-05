@@ -5,14 +5,17 @@ function Creep(board) {
 
 	var ele = document.createElement("div");
 	ele.className = "creep";
+	var box = document.getElementById("box");
+	$(box).append(ele);
 
 	var timeout;
 
 	this.animate = function(directions) {
 		path = directions;
-		
+		ele.dataset.loc = path.shift();
 
-		moveToNext();
+		// Quick delay to render
+		setTimeout(moveToNext, 0);
 		//console.log(path);
 	};
 
@@ -22,27 +25,47 @@ function Creep(board) {
 	}, false);
 
 	function moveToNext() {
-		var start = path.shift();
-		var startEle = document.getElementById(start);
-		ele.dataset.loc = start;
+		var next = path.shift();
 
-		//$(ele).addClass("moveDown");
-		$(startEle).append(ele);
-
-		var next = path[0];
 		// no more items in path
 		if (!next) {
 			return;
 		}
 
-		move("down");
+		var current = ele.dataset.loc.split("-");
+		var nextParts = next.split("-");
 
+		var direction = "";
+		if (current[0] < next[0]) {
+			direction = "down";
+		} else if (current[0] > nextParts[0]) {
+			direction = "up";
+		} else if (current[1] < nextParts[1]) {
+			direction = "right";
+		} else {
+			direction = "left";
+		}
+
+		ele.dataset.loc = next;
+
+		move(direction);
 		console.log(next);
 	}
 
 	function move(direction) {
-		ele.style.webkitTransform = "translate(0px, 20px)";
+		var transform = "";
+		if (direction == "down") {
+			transform = "0px, 20px";
+		} else if (direction == "up") {
+			transform = "0px, -20px";
+		} else if (direction == "right") {
+			transform = "20px, 0px";
+		} else {
+			transform = "-20px, 0px";
+		}
+
+		ele.style.webkitTransform = "translate("+transform+")";
 		console.log("moving!");
-		//timeout = setTimeout(moveToNext, 1000);
+		timeout = setTimeout(moveToNext, 1000);
 	}
 }

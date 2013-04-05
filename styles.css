@@ -3,6 +3,7 @@
         border-top: 1px solid black;
         float: left;
         overflow: hidden;
+        position: relative;
 }
 .cell {
     border-right: 1px solid black;
@@ -47,12 +48,15 @@
 }
 
 .creep {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+
     -webkit-transition: all 1s linear;
     width: 12px;
     height: 12px;
     border: 1px solid black;
     background-color: #dda;
-    margin: 3px;
 }
 
 .moveDown {
