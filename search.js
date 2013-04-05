@@ -3,17 +3,20 @@ goog.require('goog.structs.PriorityQueue');
 $(function() {
     var pathFinding;
 
-    var rows = "20";
-    var cols = "30";
+    var rows = "10"; //20";
+    var cols = "10"; //30";
 
     // How many blocks we will have on the page
     var blocks = 100;
 
     var matrix = buildBoard(rows, cols);
+    var creep = new Creep(matrix);
 
     var currentCell = matrix[0][0];
     var goal = matrix[rows - 1][cols - 1];
     pathFind();
+
+
 
     function buildBoard(rows, cols) {
         var matrix = [];
@@ -103,6 +106,8 @@ $(function() {
             path.forEach(function(item) {
                 $(document.getElementById(item)).addClass("path");
             });
+
+            creep.animate(path);
             return true;
         }
     }

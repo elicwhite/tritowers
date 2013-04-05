@@ -2,6 +2,7 @@
         border-left: 1px solid black;
         border-top: 1px solid black;
         float: left;
+        overflow: hidden;
 }
 .cell {
     border-right: 1px solid black;
@@ -11,6 +12,7 @@
     float: left;
     text-align: center;
     color: white;
+    line-height: 20px;
 }
 
 .cell:hover {
@@ -42,4 +44,17 @@
 
 .cell[data-type="block"][data-level]:before {
     content:attr(data-level);
+}
+
+.creep {
+    -webkit-transition: all 1s linear;
+    width: 12px;
+    height: 12px;
+    border: 1px solid black;
+    background-color: #dda;
+    margin: 3px;
+}
+
+.moveDown {
+   -webkit-transform: translate(0px, 20px); 
 }
