@@ -41,7 +41,7 @@ function Board(rows, cols, start, goal) {
 	this.placeTower = function(loc, creep) {
 		var parts = loc.split("-");
 
-		var t = new Tower(matrix[parts[0]][parts[1]], creep);
+		var t = new Tower(loc, matrix[parts[0]][parts[1]], creep);
 	};
 
 
@@ -122,5 +122,13 @@ function Board(rows, cols, start, goal) {
 
 			return true;
 		}
+	};
+
+	this.distance = function(start, goal) {
+		var sP = start.split("-");
+		var gP = goal.split("-");
+
+		var dist = Math.abs(gP[0] - sP[0]) + Math.abs(gP[1] - sP[1]);
+		return dist;
 	};
 }

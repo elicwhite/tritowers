@@ -1,13 +1,16 @@
-function Tower(ele, creep) {
+function Tower(loc, ele, creepManager) {
 	ele.dataset.type="tower";
 
 	console.log("Tower Placed");
 
-	setTimeout(shoot, 2000);
+	setInterval(shoot, 3000);
 
 	function shoot() {
 //		var creeps = document.getElementsByClassName("creep");
 
-		creep.destroy();
+		var closest = creepManager.closest(loc);
+		if (closest[0] < 4) {
+			creepManager.destroy(closest[1]);
+		}
 	}
 }

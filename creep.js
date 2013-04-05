@@ -38,7 +38,6 @@ function Creep(board) {
 	};
 
 	this.stop = function() {
-		console.log("stopping");
 		path = [];
 		clearTimeout(timeout);
 		ele.removeEventListener('webkitTransitionEnd', transitionEnd);
@@ -62,6 +61,14 @@ function Creep(board) {
 		} else {
 			return true;
 		}
+	};
+
+	this.getLoc = function() {
+		return row + "-" + col;
+	};
+
+	this.getEle = function() {
+		return ele;
 	};
 
 	this.destroy = function() {

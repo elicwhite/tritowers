@@ -6,6 +6,7 @@ $(function() {
     var cols = 10;
 
     var start = "0-0";
+    
     var goal = "9-9";
 
     var b = new Board(10, 10, start, goal);
@@ -17,7 +18,7 @@ $(function() {
         creepManager.addCreep(start, goal);
     }, 2300);
 
-    //b.placeTower("5-4", creep);
+    b.placeTower("4-2", creepManager);
 
     b.hasPath();
 
@@ -31,8 +32,6 @@ $(function() {
             this.dataset.type = "block";
             this.dataset.level = 1;
         }
-
-        creepManager.stop();
 
         // Recalculate the path to the goal
         if (!creepManager.pathFind() || !b.hasPath()) {
@@ -63,6 +62,5 @@ $(function() {
 
         // Now that we've cleared stuff, pathfind again
         creepManager.pathFind();
-        creepManager.start();
     }
 });
