@@ -62,3 +62,7 @@
 .moveDown {
    -webkit-transform: translate(0px, 20px); 
 }
+
+.cell[data-type="tower"] {
+    background-color: green;
+}

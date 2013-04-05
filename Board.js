@@ -38,6 +38,12 @@ function Board(rows, cols, start, goal) {
 		pathFinding = new AStar(this);
 	};
 
+	this.placeTower = function(loc, creep) {
+		var parts = loc.split("-");
+
+		var t = new Tower(matrix[parts[0]][parts[1]], creep);
+	};
+
 
 	// Looks at it's neighbors to find out if it's the third
 	// of it's type connected
@@ -101,7 +107,7 @@ function Board(rows, cols, start, goal) {
 		if (!path) {
 			return false;
 		} else {
-			
+
 			// Reset all the classes
 			var lines = document.getElementById("box").childNodes;
 			for (var i = 0; i < lines.length; i++) {

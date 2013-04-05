@@ -54,7 +54,7 @@ function AStar(board) {
 	};
 
 	function neighborFilter(element) {
-		return (element.dataset.type != "block");
+		return (element.dataset.type == "free");
 	}
 
 	function manhattan_distance(start, goal) {

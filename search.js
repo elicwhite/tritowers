@@ -10,19 +10,18 @@ $(function() {
 
     var b = new Board(10, 10, start, goal);
     b.initialize(cellClicked);
+
+    var creepManager = new CreepManager(b);
+
+    setInterval(function() {
+        creepManager.addCreep(start, goal);
+    }, 2300);
+
+    //b.placeTower("5-4", creep);
+
     b.hasPath();
 
-    var creep = new Creep(b);
 
-    setCreep();
-
-
-    function setCreep() {
-        // Put the creep at top left
-        creep.initialize(start, goal, setCreep);
-        console.log("haspath: " + creep.pathFind());
-        creep.start();
-    }
 
     function cellClicked() {
         // You can only place a block where there is no block already
@@ -33,10 +32,10 @@ $(function() {
             this.dataset.level = 1;
         }
 
-        creep.stop();
+        creepManager.stop();
 
         // Recalculate the path to the goal
-        if (!creep.pathFind() || !b.hasPath()) {
+        if (!creepManager.pathFind() || !b.hasPath()) {
             console.log("You can't go there!");
             this.dataset.type = "free";
         }
@@ -63,7 +62,7 @@ $(function() {
         }
 
         // Now that we've cleared stuff, pathfind again
-        creep.pathFind();
-        creep.start();
+        creepManager.pathFind();
+        creepManager.start();
     }
 });

@@ -19,6 +19,8 @@ function Creep(board) {
 	// WHere are we going
 	var goal;
 
+	var self = this;
+
 	// Initialize the creep to start at a location
 	this.initialize = function(start, endGoal, callbackFn) {
 		var parts = start.split("-");
@@ -53,8 +55,6 @@ function Creep(board) {
 
 	// Returns true if a path was found. False otherwise
 	this.pathFind = function() {
-		
-
 		path = pathFinding.findPath(row + "-" + col, goal);
 
 
@@ -65,12 +65,18 @@ function Creep(board) {
 		}
 	};
 
+	this.destroy = function() {
+		this.stop();
+		ele.parentNode.removeChild(ele);
+	}
+
 	function moveToNext() {
 		var next = path.shift();
 
 		// no more items in path
 		if (!next) {
-			callback();
+			self.destroy();
+			callback.call(self);
 			return;
 		}
 
@@ -89,7 +95,7 @@ function Creep(board) {
 
 		var transform = "translate3d(" + (col * 20) + "px, " + (row * 20) + "px, 0px)";
 		ele.style.webkitTransform = transform;
-		console.log("moving to: " + next);
+		//console.log("moving to: " + next);
 
 		timeout = setTimeout(moveToNext, 1000);
 	}

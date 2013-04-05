@@ -7,6 +7,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 <script src="AStar.js"></script>
 <script src="Board.js"></script>
+<script src="Tower.js"></script>
+<script src="CreepManager.js"></script>
 <script src="creep.js"></script>
 <script src="search.js"></script>
 </head>
