@@ -1,7 +1,6 @@
-function Creep(board) {
+function Creep(matrix) {
 	"use strict";
 
-	var matrix = board;
 	var pathFinding = new AStar(matrix);
 	var ele;
 
@@ -35,16 +34,23 @@ function Creep(board) {
 
 		//ele.dataset.loc = startRow + "-" + startCol;
 
-		ele.addEventListener('webkitTransitionEnd', function() {
-			clearTimeout(timeout);
-			moveToNext();
-		}, false);
+		
 	};
+
+	
 
 	this.stop = function() {
 		console.log("stopping");
 		path = [];
 		clearTimeout(timeout);
+		ele.removeEventListener('webkitTransitionEnd',transitionEnd);
+	};
+
+	this.start = function() {
+		ele.addEventListener('webkitTransitionEnd', transitionEnd);
+		if (path) {
+			animate(path);
+		}
 	};
 
 	// Returns true if a path was found. False otherwise
@@ -57,7 +63,7 @@ function Creep(board) {
 			}
 		}
 
-		var path = pathFinding.findPath(matrix[row][col], goal);
+		path = pathFinding.findPath(matrix[row][col], goal);
 		if (!path) {
 			return false;
 		} else {
@@ -65,14 +71,13 @@ function Creep(board) {
 				$(document.getElementById(item)).addClass("path");
 			});
 
-			animate(path);
 			return true;
 		}
 	};
 
 	function animate(directions) {
 		path = directions;
-		ele.dataset.loc = path.shift();
+		//ele.dataset.loc = path.shift();
 
 		// Quick delay to render
 		setTimeout(moveToNext, 0);
@@ -80,7 +85,8 @@ function Creep(board) {
 	}
 
 	function moveToNext() {
-		var next = path.shift();
+		ele.dataset.loc = path.shift();
+		var next = path[0];
 
 		// no more items in path
 		if (!next) {
@@ -106,6 +112,11 @@ function Creep(board) {
 		ele.dataset.loc = next;
 		console.log("moving to: " + next);
 
-		timeout = setTimeout(moveToNext, 500);
+		timeout = setTimeout(moveToNext, 1000);
+	}
+
+	function transitionEnd() {
+		clearTimeout(timeout);
+		moveToNext();
 	}
 }

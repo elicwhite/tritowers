@@ -1,15 +1,16 @@
 goog.require('goog.structs.PriorityQueue');
 
 $(function() {
-    var rows = "10"; //20";
-    var cols = "10"; //30";
-
     // How many blocks we will have on the page
-    var blocks = 100;
+    var rows = 10;
+    var cols = 10;
 
-    var matrix = buildBoard(rows, cols);
+    var b = new Board(10, 10, 0, 0, 9, 9);
+    b.initialize(cellClicked);
+    var matrix = b.getMatrix();
+
     var creep = new Creep(matrix);
-
+    var foo = "bar";
     //var currentCell = matrix[0][0];
     var goal = matrix[rows - 1][cols - 1];
 
@@ -20,40 +21,7 @@ $(function() {
         // Put the creep at top left
         creep.initialize(0, 0, goal, setCreep);
         creep.pathFind();
-    }
-
-
-    function buildBoard(rows, cols) {
-        var matrix = [];
-
-        var box = document.getElementById("box");
-
-        for (var row = 0; row < rows; row++) {
-            matrix[row] = [];
-            var line = document.createElement("div");
-            line.className = "line";
-
-            for (var col = 0; col < cols; col++) {
-                var ele = document.createElement("div");
-                ele.className = "cell";
-                ele.row = row;
-                ele.col = col;
-                ele.id = ele.row + "-" + ele.col;
-
-                ele.dataset.type = "free";
-                if (row === 0 && col == 9) {
-                    ele.dataset.type = "block";
-                    ele.dataset.level = 1;
-                }
-
-                ele.onclick = cellClicked;
-                $(line).append(ele);
-                matrix[row][col] = ele;
-            }
-            $(box).append(line);
-        }
-
-        return matrix;
+        creep.start();
     }
 
     function cellClicked() {
@@ -68,15 +36,14 @@ $(function() {
         creep.stop();
 
         // Recalculate the path to the goal
-        if (!creep.pathFind()) {
+        if (!creep.pathFind() || !b.hasPath()) {
             console.log("You can't go there!");
             this.dataset.type = "free";
-            creep.pathFind();
         }
 
 
         // path was found, merge neighbors
-        var third = isThird(this);
+        var third = b.isThird(this);
 
         // Make sure we keep checking while we change things
         while (third[0]) {
@@ -90,44 +57,13 @@ $(function() {
                 }
             }
 
-            // Now that we've cleared stuff, pathfind again
-            creep.pathFind();
 
-            third = isThird(this);
-        }
-    }
 
-    // Looks at it's neighbors to find out if it's the third
-    // of it's type connected
-
-    function isThird(ele) {
-        var result = isThirdHelper([ele], []);
-        return [result.length >= 3, result];
-
-    }
-
-    function isThirdHelper(openSet, closedSet) {
-        // put Ele in scope for the filter
-        var ele;
-        // Add ele to a new closed set
-        while (openSet.length > 0) {
-            ele = openSet.pop();
-            closedSet.push(ele);
-
-            // Get all the neighbors that aren't in the closed set, and are of the same type
-            var neighbors = pathFinding.getNeighbors(ele).filter(filter);
-
-            for (var i = 0; i < neighbors.length; i++) {
-                openSet.push(neighbors[i]);
-            }
+            third = b.isThird(this);
         }
 
-        return closedSet;
-
-        function filter(element) {
-            return ((closedSet.indexOf(element) == -1) && (element.dataset.type == ele.dataset.type) && (element.dataset.level == ele.dataset.level));
-        }
+        // Now that we've cleared stuff, pathfind again
+        creep.pathFind();
+        creep.start();
     }
-
-
 });
