@@ -1,4 +1,4 @@
-function Board(rows, cols, startRow, startCol, endRow, endCol) {
+function Board(rows, cols, start, goal) {
 	var matrix;
 
 	var pathFinding;
@@ -38,14 +38,11 @@ function Board(rows, cols, startRow, startCol, endRow, endCol) {
 		pathFinding = new AStar(this);
 	};
 
-	this.getMatrix = function() {
-		return matrix;
-	};
-
 
 	// Looks at it's neighbors to find out if it's the third
-    // of it's type connected
-	this.isThird = function(ele) {
+	// of it's type connected
+	this.isThird = function(loc) {
+		var ele = document.getElementById(loc);
 
 		var openSet = [ele];
 		var closedSet = [];
@@ -70,40 +67,45 @@ function Board(rows, cols, startRow, startCol, endRow, endCol) {
 		}
 	};
 
-	this.getNeighbors = function(cell) {
-		var neighbors = [];
+	this.getNeighbors = function(ele) {
+		var parts = ele.id.split("-");
 
+		var neighbors = [];
 		// check neighbors
 
 		// top
-		if (cell.row - 1 >= 0) {
-			neighbors.push(matrix[cell.row - 1][cell.col]);
+		if (ele.row - 1 >= 0) {
+			neighbors.push(matrix[ele.row - 1][ele.col]);
 		}
 
 		// left
-		if (cell.col - 1 >= 0) {
-			neighbors.push(matrix[cell.row][cell.col - 1]);
+		if (ele.col - 1 >= 0) {
+			neighbors.push(matrix[ele.row][ele.col - 1]);
 		}
 
 		// right
-		if (cell.col + 1 < matrix[0].length) {
-			neighbors.push(matrix[cell.row][cell.col + 1]);
+		if (ele.col + 1 < matrix[0].length) {
+			neighbors.push(matrix[ele.row][ele.col + 1]);
 		}
 
 		// bottom
-		if (cell.row + 1 < matrix.length) {
-			neighbors.push(matrix[cell.row + 1][cell.col]);
+		if (ele.row + 1 < matrix.length) {
+			neighbors.push(matrix[ele.row + 1][ele.col]);
 		}
 
 		return neighbors;
 	};
 
 	this.hasPath = function() {
-		var result = pathFinding.findPath(matrix[startRow][startCol], matrix[endRow][endCol]);
-		if (result) {
+		path = pathFinding.findPath(start, goal);
+		if (!path) {
+			return false;
+		} else {
+			path.forEach(function(item) {
+				$(document.getElementById(item)).addClass("path");
+			});
+
 			return true;
 		}
-
-		return false;
 	};
 }

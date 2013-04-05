@@ -5,22 +5,21 @@ $(function() {
     var rows = 10;
     var cols = 10;
 
-    var b = new Board(10, 10, 0, 0, 9, 9);
+    var start = "0-0";
+    var goal = "9-9";
+
+    var b = new Board(10, 10, start, goal);
     b.initialize(cellClicked);
-    var matrix = b.getMatrix();
 
     var creep = new Creep(b);
-    var foo = "bar";
-    //var currentCell = matrix[0][0];
-    var goal = matrix[rows - 1][cols - 1];
 
     setCreep();
 
 
-    function setCreep() {
+    function setCreep() { 
         // Put the creep at top left
-        creep.initialize(0, 0, goal, setCreep);
-        creep.pathFind();
+        creep.initialize(start, goal, setCreep);
+        console.log("haspath: "+creep.pathFind());
         creep.start();
     }
 
@@ -43,7 +42,7 @@ $(function() {
 
 
         // path was found, merge neighbors
-        var third = b.isThird(this);
+        var third = b.isThird(this.id);
 
         // Make sure we keep checking while we change things
         while (third[0]) {
@@ -59,7 +58,7 @@ $(function() {
 
 
 
-            third = b.isThird(this);
+            third = b.isThird(this.id);
         }
 
         // Now that we've cleared stuff, pathfind again

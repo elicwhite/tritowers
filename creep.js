@@ -1,29 +1,37 @@
 function Creep(board) {
 	"use strict";
-	var matrix = board.getMatrix();
 
 	var pathFinding = new AStar(board);
 	var ele;
 
+	// Callback called when at the end of the path
 	var callback;
 
+	// Path we are following
 	var path;
-	var goal;
 
 	var timeout;
 
+	// Where are we right now
 	var row;
 	var col;
 
+	// WHere are we going
+	var goal;
 
+
+	// Values for our current translate
 	var transX = 0;
 	var transY = 0;
 
 	// Initialize the creep to start at a location
-	this.initialize = function(startRow, startCol, endGoal, callbackFn) {
-		row = startRow;
-		col = startCol;
+	this.initialize = function(start, endGoal, callbackFn) {
+		var parts = start.split("-");
+		row = parts[0];
+		col = parts[1];
+
 		goal = endGoal;
+
 		callback = callbackFn;
 
 		ele = document.createElement("div");
@@ -43,7 +51,7 @@ function Creep(board) {
 	this.start = function() {
 		ele.addEventListener('webkitTransitionEnd', transitionEnd);
 		if (path) {
-			animate(path);
+			animate();
 		}
 	};
 
@@ -57,20 +65,17 @@ function Creep(board) {
 			}
 		}
 
-		path = pathFinding.findPath(matrix[row][col], goal);
+		path = pathFinding.findPath(row+"-"+col, goal);
+
+
 		if (!path) {
 			return false;
 		} else {
-			path.forEach(function(item) {
-				$(document.getElementById(item)).addClass("path");
-			});
-
 			return true;
 		}
 	};
 
-	function animate(directions) {
-		path = directions;
+	function animate() {
 		//ele.dataset.loc = path.shift();
 
 		// Quick delay to render
@@ -79,8 +84,9 @@ function Creep(board) {
 	}
 
 	function moveToNext() {
-		ele.dataset.loc = path.shift();
-		var next = path[0];
+		//ele.dataset.loc = path.shift();
+		//var next = path[0];
+		var next = path.shift();
 
 		// no more items in path
 		if (!next) {
@@ -88,22 +94,22 @@ function Creep(board) {
 			return;
 		}
 
-		var current = ele.dataset.loc.split("-");
 		var nextParts = next.split("-");
 
-		if (current[0] < nextParts[0]) {
+		if (row < nextParts[0]) {
 			row += 1;
-		} else if (current[0] > nextParts[0]) {
+		} else if (row > nextParts[0]) {
 			row -= 1;
-		} else if (current[1] < nextParts[1]) {
+		} else if (col < nextParts[1]) {
 			col += 1;
 		} else {
 			col -= 1;
 		}
 
+
 		var transform = "translate3d(" + (col * 20) + "px, " + (row * 20) + "px, 0px)";
 		ele.style.webkitTransform = transform;
-		ele.dataset.loc = next;
+		//ele.dataset.loc = next;
 		console.log("moving to: " + next);
 
 		timeout = setTimeout(moveToNext, 1000);

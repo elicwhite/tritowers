@@ -2,14 +2,13 @@ function AStar(board) {
 	"use strict";
 
 	this.findPath = function(start, goal) {
-
 		var closedSet = [];
 		var openSet = new goog.structs.PriorityQueue();
 
-		var cameFrom = [];
+		var cameFrom = {};
 
-		var g_score = [];
-		var f_score = [];
+		var g_score = {};
+		var f_score = {};
 		g_score[start] = 0;
 
 		f_score[start] = g_score[start] + manhattan_distance(start, goal);
@@ -21,15 +20,18 @@ function AStar(board) {
 			var current = openSet.dequeue();
 			// style the ones we've processed
 			if (current == goal) {
-				return reconstructPath(cameFrom, goal.id);
+				return reconstructPath(cameFrom, goal);
 			}
 
 			closedSet.push(current);
 
-			var neighbors = board.getNeighbors(current).filter(neighborFilter);
+
+
+			var neighbors = board.getNeighbors(document.getElementById(current)).filter(neighborFilter);
 
 			for (var i = 0; i < neighbors.length; i++) {
-				var neighbor = neighbors[i];
+				var neighbor = neighbors[i].id;
+
 				var temp_g_score = g_score[current] + manhattan_distance(current, neighbor);
 				if (closedSet.indexOf(neighbor) >= 0) {
 					if (temp_g_score >= g_score[neighbor]) {
@@ -38,7 +40,7 @@ function AStar(board) {
 				}
 
 				if (!openSet.containsValue(neighbor) || temp_g_score < g_score[neighbor]) {
-					cameFrom[neighbor.id] = current.id;
+					cameFrom[neighbor] = current;
 					g_score[neighbor] = temp_g_score;
 					f_score[neighbor] = g_score[neighbor] + manhattan_distance(neighbor, goal);
 					if (!openSet.containsValue(neighbor)) {
@@ -56,7 +58,10 @@ function AStar(board) {
 	}
 
 	function manhattan_distance(start, goal) {
-		var dist = Math.abs(goal.row - start.row) + Math.abs(goal.col - start.col);
+		var sP = start.split("-");
+		var gP = goal.split("-");
+
+		var dist = Math.abs(gP[0] - sP[0]) + Math.abs(gP[1] - sP[1]);
 		return dist;
 	}
 
