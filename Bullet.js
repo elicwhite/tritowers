@@ -1,10 +1,23 @@
-function Bullet(startLoc, target) {
+function Bullet(startLoc, target, onCollision) {
 	var currentX;
 	var currentY;
 
 	var ele;
 
+	var self = this;
+
+	var collision_timer;
+
 	setup();
+
+	this.destroy = function() {
+		clearTimeout(collision_timer);
+		ele.parentNode.removeChild(ele);
+	};
+
+	this.getTarget = function() {
+		return target;
+	};
 
 	function setup() {
 		var box = document.getElementById("box");
@@ -22,17 +35,40 @@ function Bullet(startLoc, target) {
 		//setInterval(reTarget, 300);
 		setTimeout(reTarget, 0);
 		ele.addEventListener('webkitTransitionEnd', reTarget);
+
+		collision_timer = setInterval(checkCollision, 200);
+	}
+
+	function checkCollision() {
+		var targetEle = target.getEle();
+		var targetLoc = getLoc(targetEle);
+		var eleLoc = getLoc(ele);
+
+		var tTop = targetLoc[1] - 0.5 * targetEle.offsetHeight;
+		var tBottom = targetLoc[1] + 0.5 * targetEle.offsetHeight;
+		var tLeft = targetLoc[0] - 0.5 * targetEle.offsetWidth;
+		var tRight = targetLoc[0] + 0.5 * targetEle.offsetWidth;
+
+		var eTop = eleLoc[1] - 0.5 * ele.offsetHeight;
+		var eBottom = eleLoc[1] + 0.5 * ele.offsetHeight;
+		var eLeft = eleLoc[0] - 0.5 * ele.offsetWidth;
+		var eRight = eleLoc[0] + 0.5 * ele.offsetWidth;
+
+		var collide = !(tLeft > eRight || tRight < eLeft || tTop > eBottom || tBottom < eTop);
+
+		if (collide) {
+			onCollision.call(self);
+		}
 	}
 
 
-
 	function reTarget() {
-		var targetMatrix = new WebKitCSSMatrix(target.getEle().style.webkitTransform);
+		var targetLoc = getLoc(target.getEle());
 		//console.log("Target at: "+targetMatrix.e+", "+targetMatrix.f);	
 		//console.log("I'm at: "+currentX+", "+currentY);
 
-		var bulletX = (targetMatrix.e - currentX);
-		var bulletY = (targetMatrix.f - currentY);
+		var bulletX = (targetLoc.x - currentX);
+		var bulletY = (targetLoc.y - currentY);
 
 		var distance = Math.sqrt(bulletX * bulletX + bulletY * bulletY);
 		bulletX /= distance;
@@ -55,5 +91,13 @@ function Bullet(startLoc, target) {
 	function setTransform() {
 		var transform = "translate3d(" + currentX + "px, " + currentY + "px, 0px)";
 		ele.style.webkitTransform = transform;
+	}
+
+	function getLoc(ele) {
+		var targetMatrix = new WebKitCSSMatrix(window.getComputedStyle(ele).webkitTransform);
+		return {
+			x: targetMatrix.e,
+			y: targetMatrix.f
+		};
 	}
 }
