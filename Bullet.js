@@ -44,15 +44,15 @@ function Bullet(startLoc, target, onCollision) {
 		var targetLoc = getLoc(targetEle);
 		var eleLoc = getLoc(ele);
 
-		var tTop = targetLoc[1] - 0.5 * targetEle.offsetHeight;
-		var tBottom = targetLoc[1] + 0.5 * targetEle.offsetHeight;
-		var tLeft = targetLoc[0] - 0.5 * targetEle.offsetWidth;
-		var tRight = targetLoc[0] + 0.5 * targetEle.offsetWidth;
+		var tTop = targetLoc.y;// - 0.5 * targetEle.offsetHeight;
+		var tBottom = targetLoc.y + targetEle.offsetHeight;
+		var tLeft = targetLoc.x;// - 0.5 * targetEle.offsetWidth;
+		var tRight = targetLoc.x +  targetEle.offsetWidth;
 
-		var eTop = eleLoc[1] - 0.5 * ele.offsetHeight;
-		var eBottom = eleLoc[1] + 0.5 * ele.offsetHeight;
-		var eLeft = eleLoc[0] - 0.5 * ele.offsetWidth;
-		var eRight = eleLoc[0] + 0.5 * ele.offsetWidth;
+		var eTop = eleLoc.y;// - 0.5 * ele.offsetHeight;
+		var eBottom = eleLoc.y + ele.offsetHeight;
+		var eLeft = eleLoc.x;// - 0.5 * ele.offsetWidth;
+		var eRight = eleLoc.x + ele.offsetWidth;
 
 		var collide = !(tLeft > eRight || tRight < eLeft || tTop > eBottom || tBottom < eTop);
 
