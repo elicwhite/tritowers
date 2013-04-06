@@ -45,7 +45,7 @@ function CreepManager(board) {
 		creeps[index].destroy();
 
 		remove(creep);
-	}
+	};
 
 	function remove(creep) {
 		var index =  creeps.indexOf(creep);

@@ -8,6 +8,7 @@
 <script src="AStar.js"></script>
 <script src="Board.js"></script>
 <script src="Tower.js"></script>
+<script src="Bullet.js"></script>
 <script src="CreepManager.js"></script>
 <script src="creep.js"></script>
 <script src="search.js"></script>

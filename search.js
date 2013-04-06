@@ -6,7 +6,7 @@ $(function() {
     var cols = 10;
 
     var start = "0-0";
-    
+
     var goal = "9-9";
 
     var b = new Board(10, 10, start, goal);
@@ -55,8 +55,6 @@ $(function() {
                 }
             }
 
-
-
             third = b.isThird(this.id);
         }
 
@@ -64,3 +62,7 @@ $(function() {
         creepManager.pathFind();
     }
 });
+
+function matrixToArray(matrix) {
+    return matrix.substr(12, matrix.length - 8).split(', ');
+}
