@@ -68,7 +68,7 @@
 }
 
 .bullet {
-    -webkit-transition: all .3s linear;
+    -webkit-transition: all .2s linear;
     position: absolute;
     top: 7px;
     left: 7px;

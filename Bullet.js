@@ -36,7 +36,7 @@ function Bullet(startLoc, target, onCollision) {
 		setTimeout(reTarget, 0);
 		ele.addEventListener('webkitTransitionEnd', reTarget);
 
-		collision_timer = setInterval(checkCollision, 200);
+		collision_timer = setInterval(checkCollision, 100);
 	}
 
 	function checkCollision() {
