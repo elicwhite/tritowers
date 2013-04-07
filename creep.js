@@ -68,12 +68,16 @@ function Creep(board) {
 	};
 
 	this.getEle = function() {
+		if (ele === null) {
+			console.log("Ele is null!");
+		}
 		return ele;
 	};
 
 	this.destroy = function() {
 		this.stop();
 		ele.parentNode.removeChild(ele);
+		ele = null;
 	};
 
 	function moveToNext() {

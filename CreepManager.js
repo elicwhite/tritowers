@@ -50,5 +50,5 @@ function CreepManager(board) {
 	function remove(creep) {
 		var index =  creeps.indexOf(creep);
 		delete creeps[index];
-	};
+	}
 }

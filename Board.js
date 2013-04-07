@@ -1,17 +1,21 @@
 function Board(rows, cols, start, goal) {
-	var matrix;
+	var self = this;
+
+	var eleMatrix;
+
+	var towers = {};
 
 	var pathFinding;
 
 	// Initialize the board matrix, set clickHandler
 	// to be the handler for each element
 	this.initialize = function(clickHandler) {
-		matrix = [];
+		eleMatrix = [];
 
 		var box = document.getElementById("box");
 
 		for (var row = 0; row < rows; row++) {
-			matrix[row] = [];
+			eleMatrix[row] = [];
 			var line = document.createElement("div");
 			line.className = "line";
 
@@ -30,7 +34,7 @@ function Board(rows, cols, start, goal) {
 
 				ele.onclick = clickHandler;
 				$(line).append(ele);
-				matrix[row][col] = ele;
+				eleMatrix[row][col] = ele;
 			}
 			$(box).append(line);
 		}
@@ -41,7 +45,17 @@ function Board(rows, cols, start, goal) {
 	this.placeTower = function(loc, creep) {
 		var parts = loc.split("-");
 
-		var t = new Tower(loc, matrix[parts[0]][parts[1]], creep);
+		var t = new Tower(loc, eleMatrix[parts[0]][parts[1]], creep);
+		towers[loc] = t;
+	};
+
+	this.getTower = function(loc) {
+		var tower = towers[loc];
+		if (tower) {
+			return tower;
+		}
+
+		consle.log("No Tower at " + loc);
 	};
 
 
@@ -81,22 +95,22 @@ function Board(rows, cols, start, goal) {
 
 		// top
 		if (ele.row - 1 >= 0) {
-			neighbors.push(matrix[ele.row - 1][ele.col]);
+			neighbors.push(eleMatrix[ele.row - 1][ele.col]);
 		}
 
 		// left
 		if (ele.col - 1 >= 0) {
-			neighbors.push(matrix[ele.row][ele.col - 1]);
+			neighbors.push(eleMatrix[ele.row][ele.col - 1]);
 		}
 
 		// right
-		if (ele.col + 1 < matrix[0].length) {
-			neighbors.push(matrix[ele.row][ele.col + 1]);
+		if (ele.col + 1 < eleMatrix[0].length) {
+			neighbors.push(eleMatrix[ele.row][ele.col + 1]);
 		}
 
 		// bottom
-		if (ele.row + 1 < matrix.length) {
-			neighbors.push(matrix[ele.row + 1][ele.col]);
+		if (ele.row + 1 < eleMatrix.length) {
+			neighbors.push(eleMatrix[ele.row + 1][ele.col]);
 		}
 
 		return neighbors;
@@ -107,19 +121,6 @@ function Board(rows, cols, start, goal) {
 		if (!path) {
 			return false;
 		} else {
-
-			// Reset all the classes
-			var lines = document.getElementById("box").childNodes;
-			for (var i = 0; i < lines.length; i++) {
-				for (var j = 0; j < lines[i].childNodes.length; j++) {
-					lines[i].childNodes[j].className = "cell";
-				}
-			}
-
-			path.forEach(function(item) {
-				$(document.getElementById(item)).addClass("path");
-			});
-
 			return true;
 		}
 	};
@@ -131,4 +132,24 @@ function Board(rows, cols, start, goal) {
 		var dist = Math.abs(gP[0] - sP[0]) + Math.abs(gP[1] - sP[1]);
 		return dist;
 	};
+
+	this.drawRange = function(loc, range) {
+		var parts = loc.split("-");
+
+		var ele = document.getElementById(loc);
+		helper(ele, range);
+
+		function helper(ele, depth) {
+			if (depth === 0) {
+				return;
+			}
+
+			$(ele).addClass("range");
+			var neighbors = self.getNeighbors(ele);
+			for (var i = 0; i < neighbors.length; i++) {
+				helper(neighbors[i], depth - 1);
+			}
+		}
+	};
+
 }

@@ -11,9 +11,8 @@
     width: 19px;
     height: 19px;
     float: left;
-    text-align: center;
     color: white;
-    line-height: 20px;
+    font-size: 8px;
 }
 
 .cell:hover {
@@ -24,12 +23,9 @@
     clear: both;
 }
 
-.path {
-    background-color: #acd;
-}
-
 .cell[data-type="block"] {
     background-color: black;
+    
 }
 
 .controls
@@ -68,7 +64,7 @@
 }
 
 .bullet {
-    -webkit-transition: all .2s linear;
+    -webkit-transition: all .05s linear;
     position: absolute;
     top: 7px;
     left: 7px;
@@ -76,4 +72,8 @@
     height: 4px;
     border: 1px solid black;
     background-color: #222;
+}
+
+.range {
+    background-color: #cad;
 }

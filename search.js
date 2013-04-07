@@ -18,7 +18,7 @@ $(function() {
         creepManager.addCreep(start, goal);
     }, 2300);
 
-    b.placeTower("4-2", creepManager);
+    b.placeTower("4-4", creepManager);
 
     b.hasPath();
 
@@ -26,7 +26,12 @@ $(function() {
 
     function cellClicked() {
         // You can only place a block where there is no block already
-        if (this.dataset.type != "free") {
+        if (this.dataset.type == "tower") {
+            var tower = b.getTower(this.id);
+            b.drawRange(this.id, tower.getRange());
+            return;
+        }
+        else if (this.dataset.type != "free") {
             return;
         } else {
             this.dataset.type = "block";
