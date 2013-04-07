@@ -21,11 +21,13 @@ function Creep(board) {
 
 	var self = this;
 
+	var cellSize = getLessVars("vars").cellSize;
+
 	// Initialize the creep to start at a location
 	this.initialize = function(start, endGoal, callbackFn) {
 		var parts = start.split("-");
-		row = parseInt(parts[0]);
-		col = parseInt(parts[1]);
+		row = parseInt(parts[0], 10);
+		col = parseInt(parts[1], 10);
 
 		goal = endGoal;
 
@@ -123,7 +125,7 @@ function Creep(board) {
 		}
 
 
-		var transform = "translate3d(" + (tempCol * 20) + "px, " + (tempRow * 20) + "px, 0px)";
+		var transform = "translate3d(" + (tempCol * gameVars.cellSize) + "px, " + (tempRow * gameVars.cellSize) + "px, 0px)";
 		ele.style.webkitTransform = transform;
 		//console.log("moving to: " + next);
 

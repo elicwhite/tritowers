@@ -5,6 +5,7 @@
 <link type="text/css" rel="stylesheet" href="styles.css"></style>
 <script src="closure-library/closure/goog/base.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script src="lessVars.js"></script>
 <script src="AStar.js"></script>
 <script src="Board.js"></script>
 <script src="Tower.js"></script>
@@ -21,8 +22,12 @@ will turn into one of a higher level and the rest will go away.
 		<br />
 		Build a path of high level blocks!
 	</p>
-    <div id="box">
+    <div id="container">
+        <div id="boxBorder">
+            <div id="box">
 
+            </div>
+        </div>
     </div>
     <!--
     <div class="controls">

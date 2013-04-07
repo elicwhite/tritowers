@@ -1,15 +1,17 @@
 goog.require('goog.structs.PriorityQueue');
 
+var gameVars = getLessVars("vars");
+
 $(function() {
     // How many blocks we will have on the page
-    var rows = 10;
-    var cols = 10;
+    var rows = 20;
+    var cols = 20;
 
     var start = "0-0";
 
-    var goal = "9-9";
+    var goal = "19-19";
 
-    var b = new Board(10, 10, start, goal);
+    var b = new Board(rows, cols, start, goal);
     b.initialize(cellClicked);
 
     var creepManager = new CreepManager(b);
@@ -18,7 +20,7 @@ $(function() {
         creepManager.addCreep(start, goal);
     }, 2300);
 
-    b.placeTower("4-4", creepManager);
+    b.placeTower("2-2", creepManager);
 
     b.hasPath();
 

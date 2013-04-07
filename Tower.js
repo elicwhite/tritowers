@@ -5,7 +5,7 @@ function Tower(loc, ele, creepManager) {
 
 	console.log("Tower Placed");
 
-	setInterval(shoot, 3000);
+	setInterval(shoot, 500);
 
 	//var bullets = [];
 
@@ -21,7 +21,7 @@ function Tower(loc, ele, creepManager) {
 	function onCollision() {
 		// Destroy the bullet
 		this.destroy();
-		creepManager.destroy(this.getTarget());
+		//creepManager.destroy(this.getTarget());
 	}
 
 	this.getRange = function() {

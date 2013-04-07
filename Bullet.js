@@ -27,8 +27,8 @@ function Bullet(startLoc, target, onCollision) {
 
 		var parts = startLoc.split("-");
 
-		currentX = (parts[1] * 20);
-		currentY = (parts[0] * 20);
+		currentX = (parts[1] * gameVars.cellSize);
+		currentY = (parts[0] * gameVars.cellSize);
 
 		setTransform();
 
@@ -46,12 +46,12 @@ function Bullet(startLoc, target, onCollision) {
 
 		var tTop = targetLoc.y;// - 0.5 * targetEle.offsetHeight;
 		var tBottom = targetLoc.y + targetEle.offsetHeight;
-		var tLeft = targetLoc.x;// - 0.5 * targetEle.offsetWidth;
-		var tRight = targetLoc.x +  targetEle.offsetWidth;
+		var tLeft = targetLoc.x; // - 0.5 * targetEle.offsetWidth;
+		var tRight = targetLoc.x + targetEle.offsetWidth;
 
-		var eTop = eleLoc.y;// - 0.5 * ele.offsetHeight;
+		var eTop = eleLoc.y; // - 0.5 * ele.offsetHeight;
 		var eBottom = eleLoc.y + ele.offsetHeight;
-		var eLeft = eleLoc.x;// - 0.5 * ele.offsetWidth;
+		var eLeft = eleLoc.x; // - 0.5 * ele.offsetWidth;
 		var eRight = eleLoc.x + ele.offsetWidth;
 
 		var collide = !(tLeft > eRight || tRight < eLeft || tTop > eBottom || tBottom < eTop);
