@@ -34,17 +34,15 @@ body {
   height: 24px;
   float: left;
   color: white;
-  font-size: 9px;
+  font-size: 11px;
   text-align: left;
-}
-.cell:hover {
-  background-color: red;
 }
 .line {
   clear: both;
 }
 .cell[data-type="block"] {
-  background-color: black;
+  background-color: #48beef;
+  color: black;
 }
 .controls {
   clear: both;
@@ -68,9 +66,6 @@ body {
 }
 .moveDown {
   -webkit-transform: translate(0px, 20px);
-}
-.cell[data-type="tower"] {
-  background-color: #48beef;
 }
 .bullet {
   -webkit-transition: all .05s linear;

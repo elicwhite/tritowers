@@ -34,6 +34,7 @@ html, body {
     background-color: #202020;
     vertical-align: bottom;
 }
+
 .cell {
     border-right: 1px dotted @grid-color;
     border-bottom: 1px dotted @grid-color;
@@ -41,12 +42,8 @@ html, body {
     height: @cellSize - 1px;
     float: left;
     color: white;
-    font-size: 9px;
+    font-size: 11px;
     text-align: left;
-}
-
-.cell:hover {
-    background-color: red;
 }
 
 .line {
@@ -54,7 +51,8 @@ html, body {
 }
 
 .cell[data-type="block"] {
-    background-color: black;
+    background-color: #48beef;
+    color: black;
     
 }
 
@@ -92,10 +90,6 @@ html, body {
 
 .moveDown {
    -webkit-transform: translate(0px, 20px); 
-}
-
-.cell[data-type="tower"] {
-    background-color: #48beef;
 }
 
 .bullet {

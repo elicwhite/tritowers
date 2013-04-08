@@ -1,9 +1,10 @@
 function CreepManager(board) {
-	var creeps = [];
 	var self = this;
 
+	var creeps = [];
+	
 	this.addCreep = function(start, goal) {
-		var creep = new Creep(board);
+		var creep = new Creep(board, creepDied);
 		creep.initialize(start, goal, this.creepFinished);
 		creep.pathFind();
 		creep.start();
@@ -50,5 +51,9 @@ function CreepManager(board) {
 	function remove(creep) {
 		var index =  creeps.indexOf(creep);
 		delete creeps[index];
+	}
+
+	function creepDied() {
+		self.destroy(this);
 	}
 }

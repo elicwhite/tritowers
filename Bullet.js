@@ -39,12 +39,25 @@ function Bullet(startLoc, target, onCollision) {
 		collision_timer = setInterval(checkCollision, 10);
 	}
 
+	// Make sure that our target is alive
+
+	function targetDead() {
+		if (!target || !target.isAlive()) {
+			self.destroy();
+			return true;
+		}
+
+		return false;
+	}
+
 	function checkCollision() {
+		if (targetDead()) return;
+
 		var targetEle = target.getEle();
 		var targetLoc = getLoc(targetEle);
 		var eleLoc = getLoc(ele);
 
-		var tTop = targetLoc.y;// - 0.5 * targetEle.offsetHeight;
+		var tTop = targetLoc.y; // - 0.5 * targetEle.offsetHeight;
 		var tBottom = targetLoc.y + targetEle.offsetHeight;
 		var tLeft = targetLoc.x; // - 0.5 * targetEle.offsetWidth;
 		var tRight = targetLoc.x + targetEle.offsetWidth;
@@ -63,9 +76,9 @@ function Bullet(startLoc, target, onCollision) {
 
 
 	function reTarget() {
+		if (targetDead()) return;
+
 		var targetLoc = getLoc(target.getEle());
-		//console.log("Target at: "+targetMatrix.e+", "+targetMatrix.f);	
-		//console.log("I'm at: "+currentX+", "+currentY);
 
 		var bulletX = (targetLoc.x - currentX);
 		var bulletY = (targetLoc.y - currentY);

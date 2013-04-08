@@ -1,5 +1,6 @@
-function Creep(board) {
+function Creep(board, diedCallback) {
 	"use strict";
+	var self = this;
 
 	var pathFinding = new AStar(board);
 	var ele;
@@ -19,7 +20,7 @@ function Creep(board) {
 	// WHere are we going
 	var goal;
 
-	var self = this;
+	var life = 10;
 
 	var cellSize = getLessVars("vars").cellSize;
 
@@ -80,6 +81,17 @@ function Creep(board) {
 		this.stop();
 		ele.parentNode.removeChild(ele);
 		ele = null;
+	};
+
+	this.damage = function(damage) {
+		life -= damage;
+		if (life <= 0) {
+			diedCallback.call(self);
+		}
+	};
+
+	this.isAlive = function() {
+		return life > 0;
 	};
 
 	function moveToNext() {

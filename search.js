@@ -4,12 +4,12 @@ var gameVars = getLessVars("vars");
 
 $(function() {
     // How many blocks we will have on the page
-    var rows = 20;
-    var cols = 20;
+    var rows = 13;
+    var cols = 13;
 
     var start = "0-0";
 
-    var goal = "19-19";
+    var goal = "10-10";
 
     var b = new Board(rows, cols, start, goal);
     b.initialize(cellClicked);
@@ -28,37 +28,33 @@ $(function() {
 
     function cellClicked() {
         // You can only place a block where there is no block already
-        if (this.dataset.type == "tower") {
-            var tower = b.getTower(this.id);
-            b.drawRange(this.id, tower.getRange());
+        if (this.dataset.type != "free") {
             return;
         }
-        else if (this.dataset.type != "free") {
-            return;
-        } else {
-            this.dataset.type = "block";
-            this.dataset.level = 1;
-        }
+
+        var tower = b.placeTower(this.id, creepManager);
 
         // Recalculate the path to the goal
         if (!creepManager.pathFind() || !b.hasPath()) {
             console.log("You can't go there!");
-            this.dataset.type = "free";
+            tower.destroy();
         }
+
 
 
         // path was found, merge neighbors
         var third = b.isThird(this.id);
 
         // Make sure we keep checking while we change things
-        while (third[0]) {
+        while (third.isThird) {
             // Clear all the elements
-            for (var i = 0; i < third[1].length; i++) {
+            for (var i = 0; i < third.elements.length; i++) {
                 // Don't change the clicked item
-                if (third[1][i] == this) {
-                    this.dataset.level++;
+                var curTower = third.elements[i];
+                if (curTower.getLoc() == this.id) {
+                    curTower.levelUp();
                 } else {
-                    third[1][i].dataset.type = "free";
+                    b.removeTower(curTower.getLoc());
                 }
             }
 

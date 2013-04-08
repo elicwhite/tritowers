@@ -1,21 +1,26 @@
 function Board(rows, cols, start, goal) {
 	var self = this;
 
-	var eleMatrix;
+	// Array of divs
+	var elements;
 
-	var towers = {};
+	// Array of towers on the board
+	var towers;
 
 	var pathFinding;
 
 	// Initialize the board matrix, set clickHandler
 	// to be the handler for each element
 	this.initialize = function(clickHandler) {
-		eleMatrix = [];
+		elements = [];
+		towers = [];
 
 		var box = document.getElementById("box");
 
 		for (var row = 0; row < rows; row++) {
-			eleMatrix[row] = [];
+			elements[row] = [];
+			towers[row] = [];
+
 			var line = document.createElement("div");
 			line.className = "line";
 
@@ -27,14 +32,11 @@ function Board(rows, cols, start, goal) {
 				ele.id = ele.row + "-" + ele.col;
 
 				ele.dataset.type = "free";
-				if (row === 0 && col == 9) {
-					ele.dataset.type = "block";
-					ele.dataset.level = 1;
-				}
 
 				ele.onclick = clickHandler;
 				$(line).append(ele);
-				eleMatrix[row][col] = ele;
+				elements[row][col] = ele;
+				towers[row][col] = null;
 			}
 			$(box).append(line);
 		}
@@ -43,14 +45,23 @@ function Board(rows, cols, start, goal) {
 	};
 
 	this.placeTower = function(loc, creep) {
-		var parts = loc.split("-");
+		var l = parseLoc(loc);
 
-		var t = new Tower(loc, eleMatrix[parts[0]][parts[1]], creep);
-		towers[loc] = t;
+		var t = new Tower(loc, elements[l.row][l.col], creep);
+		towers[l.row][l.col] = t;
+	};
+
+	this.removeTower = function(loc) {
+		var l = parseLoc(loc);
+		var tower = towers[l.row][l.col];
+		tower.destroy();
+		tower = null;
 	};
 
 	this.getTower = function(loc) {
-		var tower = towers[loc];
+		var l = parseLoc(loc);
+
+		var tower = towers[l.row][l.col];
 		if (tower) {
 			return tower;
 		}
@@ -79,7 +90,12 @@ function Board(rows, cols, start, goal) {
 			}
 		}
 
-		return [closedSet.length >= 3, closedSet];
+		return {
+			isThird: closedSet.length >= 3,
+			elements: closedSet.map(function(element) {
+				return towers[element.row][element.col];
+			})
+		};
 
 
 		function filter(element) {
@@ -95,22 +111,22 @@ function Board(rows, cols, start, goal) {
 
 		// top
 		if (ele.row - 1 >= 0) {
-			neighbors.push(eleMatrix[ele.row - 1][ele.col]);
+			neighbors.push(elements[ele.row - 1][ele.col]);
 		}
 
 		// left
 		if (ele.col - 1 >= 0) {
-			neighbors.push(eleMatrix[ele.row][ele.col - 1]);
+			neighbors.push(elements[ele.row][ele.col - 1]);
 		}
 
 		// right
-		if (ele.col + 1 < eleMatrix[0].length) {
-			neighbors.push(eleMatrix[ele.row][ele.col + 1]);
+		if (ele.col + 1 < elements[0].length) {
+			neighbors.push(elements[ele.row][ele.col + 1]);
 		}
 
 		// bottom
-		if (ele.row + 1 < eleMatrix.length) {
-			neighbors.push(eleMatrix[ele.row + 1][ele.col]);
+		if (ele.row + 1 < elements.length) {
+			neighbors.push(elements[ele.row + 1][ele.col]);
 		}
 
 		return neighbors;
@@ -126,10 +142,10 @@ function Board(rows, cols, start, goal) {
 	};
 
 	this.distance = function(start, goal) {
-		var sP = start.split("-");
-		var gP = goal.split("-");
+		start = parseLoc(start);
+		goal = parseLoc(goal);
 
-		var dist = Math.abs(gP[0] - sP[0]) + Math.abs(gP[1] - sP[1]);
+		var dist = Math.abs(goal.row - start.row) + Math.abs(goal.col - start.col);
 		return dist;
 	};
 
@@ -151,5 +167,13 @@ function Board(rows, cols, start, goal) {
 			}
 		}
 	};
+
+	function parseLoc(loc) {
+		var parts = loc.split("-");
+		return {
+			row: parts[0],
+			col: parts[1]
+		};
+	}
 
 }
