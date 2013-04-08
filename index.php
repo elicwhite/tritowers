@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Tri-Towers</title>
-<link type="text/css" rel="stylesheet" href="styles.css"></style>
-<script src="closure-library/closure/goog/base.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-<script src="lessVars.js"></script>
-<script src="AStar.js"></script>
-<script src="Board.js"></script>
-<script src="Tower.js"></script>
-<script src="Bullet.js"></script>
-<script src="CreepManager.js"></script>
-<script src="creep.js"></script>
-<script src="search.js"></script>
+    <title>Tri-Towers</title>
+    <link type="text/css" rel="stylesheet" href="styles.css"></style>
+    <script src="closure-library/closure/goog/base.js"></script>
+    <script type="text/javascript">
+        goog.require('goog.structs.PriorityQueue');
+
+        function matrixToArray(matrix) {
+            return matrix.substr(12, matrix.length - 8).split(', ');
+        }
+    </script>
+
+    <script data-main="scripts/main" src="scripts/require-jquery.js"></script>
 </head>
 <body>
 	<h1> Tri-Towers!</h1>
