@@ -42,13 +42,6 @@ define(["Creep"], function(Creep) {
 			return [shortestDist, creep];
 		};
 
-		this.destroy = function(creep) {
-			var index = creeps.indexOf(creep);
-			creeps[index].destroy();
-
-			remove(creep);
-		};
-
 		function remove(creep) {
 			var index = creeps.indexOf(creep);
 			delete creeps[index];

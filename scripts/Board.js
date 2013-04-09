@@ -50,6 +50,8 @@ define(["AStar", "Tower"], function(AStar, Tower) {
 
 			var t = new Tower(loc, elements[l.row][l.col], creep);
 			towers[l.row][l.col] = t;
+
+			return t;
 		};
 
 		this.removeTower = function(loc) {
