@@ -39,11 +39,11 @@ define(["AStar", "GameVars"], function(AStar, GameVars) {
 		this.stop = function() {
 			path = [];
 			clearTimeout(timeout);
-			ele.removeEventListener('webkitTransitionEnd', transitionEnd);
+			//ele.removeEventListener('webkitTransitionEnd', transitionEnd);
 		};
 
 		this.start = function() {
-			ele.addEventListener('webkitTransitionEnd', transitionEnd);
+			//ele.addEventListener('webkitTransitionEnd', transitionEnd);
 			if (path) {
 				// Quick delay to render
 				setTimeout(moveToNext, 0);
@@ -142,7 +142,7 @@ define(["AStar", "GameVars"], function(AStar, GameVars) {
 		}
 
 		function transitionEnd() {
-			clearTimeout(timeout);
+			//clearTimeout(timeout);
 			moveToNext();
 		}
 	};

@@ -2,11 +2,11 @@ require(["jquery", "Board", "CreepManager"], function($, Board, CreepManager) {
 	$(function() {
 		// How many blocks we will have on the page
 		var rows = 13;
-		var cols = 13;
+		var cols = 8;
 
 		var start = "0-0";
 
-		var goal = "10-10";
+		var goal = "12-7";
 
 		var b = new Board(rows, cols, start, goal);
 		b.initialize(cellClicked);
