@@ -12,9 +12,10 @@ require(["jquery", "Board", "CreepManager"], function($, Board, CreepManager) {
 		b.initialize(cellClicked);
 
 		var creepManager = new CreepManager(b);
+		creepManager.initialize(start, goal);
 
 		setInterval(function() {
-			creepManager.addCreep(start, goal);
+			creepManager.addCreep();
 		}, 2300);
 
 		b.placeTower("2-2", creepManager);

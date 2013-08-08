@@ -11,29 +11,36 @@ define(["AStar", "GameVars"], function(AStar, GameVars) {
 
 		var timeout;
 
+		// what was the start position?
+		var startPos;
+		// And the goal position
+		var goalPos;
+
 		// Where are we right now
 		var row;
 		var col;
-
-		// WHere are we going
-		var goal;
 
 		var life = 10;
 
 		var cellSize = GameVars.cellSize;
 
 		// Initialize the creep to start at a location
-		this.initialize = function(start, endGoal) {
-			var parts = start.split("-");
-			row = parseInt(parts[0], 10);
-			col = parseInt(parts[1], 10);
-
-			goal = endGoal;
+		this.initialize = function(start, goal) {
+			this.startPos = start;
+			this.goalPos = goal;
 
 			ele = document.createElement("div");
 			ele.className = "creep";
 			var box = document.getElementById("box");
 			$(box).append(ele);
+		};
+
+		this.resetPosition = function() {
+			var parts = this.startPos.split("-");
+			row = parseInt(parts[0], 10);
+			col = parseInt(parts[1], 10);
+
+			setPosition(col, row);
 		};
 
 		this.stop = function() {
@@ -52,7 +59,7 @@ define(["AStar", "GameVars"], function(AStar, GameVars) {
 
 		// Returns true if a path was found. False otherwise
 		this.pathFind = function() {
-			path = pathFinding.findPath(row + "-" + col, goal);
+			path = pathFinding.findPath(row + "-" + col, this.goalPos);
 
 
 			if (!path) {
@@ -75,8 +82,6 @@ define(["AStar", "GameVars"], function(AStar, GameVars) {
 
 		this.destroy = function() {
 			this.stop();
-			ele.parentNode.removeChild(ele);
-			ele = null;
 		};
 
 		this.damage = function(damage) {
@@ -90,6 +95,11 @@ define(["AStar", "GameVars"], function(AStar, GameVars) {
 		this.isAlive = function() {
 			return life > 0;
 		};
+
+		function setPosition(row, col) {
+			var transform = "translate3d(" + (col * cellSize) + "px, " + (row * cellSize) + "px, 0px)";
+			ele.style.webkitTransform = transform;
+		}
 
 		function moveToNext() {
 			var current = path.shift();
@@ -133,9 +143,8 @@ define(["AStar", "GameVars"], function(AStar, GameVars) {
 				tempCol -= 1;
 			}
 
-
-			var transform = "translate3d(" + (tempCol * cellSize) + "px, " + (tempRow * cellSize) + "px, 0px)";
-			ele.style.webkitTransform = transform;
+			setPosition(tempRow, tempCol);
+			
 			//console.log("moving to: " + next);
 
 			timeout = setTimeout(moveToNext, 1000);

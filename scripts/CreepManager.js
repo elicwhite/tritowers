@@ -2,12 +2,26 @@ define(["Creep"], function(Creep) {
 	return function(board) {
 		var self = this;
 
+		var creepCache = [];
 		var creeps = [];
 
-		this.addCreep = function(start, goal) {
-			var creep = new Creep(board, creepDied, this.creepFinished);
-			creep.initialize(start, goal);
+		this.initialize = function(start, goal) {
+			// For performance reasons, use the same creep objects.
+			for (var i = 0; i < 20; i++) {
+				var creep = new Creep(board, creepDied, this.creepFinished);
+				creep.initialize(start, goal);
+				$(creep.getEle()).addClass("cached");
+				creepCache.push(creep);
+			}
+		};
+
+		this.addCreep = function() {
+			var creep = creepCache.shift();
+
+			// take a creep from the cache
+			creep.resetPosition();
 			creep.pathFind();
+			$(creep.getEle()).removeClass("cached");
 			creep.start();
 
 			creeps.push(creep);
@@ -43,8 +57,11 @@ define(["Creep"], function(Creep) {
 		};
 
 		function remove(creep) {
+			$(creep.getEle()).addClass("cached");
+
 			var index = creeps.indexOf(creep);
-			delete creeps[index];
+			creeps.splice(index, 1);
+			creepCache.push(creep);
 		}
 
 		function creepDied() {
