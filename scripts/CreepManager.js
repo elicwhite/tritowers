@@ -1,5 +1,6 @@
 define(["Creep"], function(Creep) {
 	return function(board) {
+		"use strict";
 		var self = this;
 
 		var creepCache = [];

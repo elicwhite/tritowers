@@ -1,4 +1,4 @@
-define(["Bullet"], function(Bullet) {
+define(["BulletManager", "Bullet"], function(BulletManager, Bullet) {
 	return function(loc, ele, creepManager) {
 		var self = this;
 
@@ -46,7 +46,8 @@ define(["Bullet"], function(Bullet) {
 			if (closest[0] < self.getRange()) {
 
 				var target = closest[1];
-				new Bullet(loc, target, onCollision);
+
+				var bullet = BulletManager.instance.takeBullet(loc, target, onCollision);
 			}
 		}
 

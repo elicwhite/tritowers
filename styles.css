@@ -81,6 +81,10 @@ body {
   border: 1px solid black;
   background-color: #dc6321;
 }
+.bullet.cached {
+  display: none;
+  -webkit-transition-duration: 0;
+}
 .range {
   background-color: #cad;
 }

@@ -1,4 +1,4 @@
-require(["jquery", "Board", "CreepManager"], function($, Board, CreepManager) {
+require(["jquery", "Board", "CreepManager", "BulletManager"], function($, Board, CreepManager, BulletManager) {
 	$(function() {
 		// How many blocks we will have on the page
 		var rows = 13;
@@ -13,6 +13,8 @@ require(["jquery", "Board", "CreepManager"], function($, Board, CreepManager) {
 
 		var creepManager = new CreepManager(b);
 		creepManager.initialize(start, goal);
+
+		BulletManager.instance.initialize();
 
 		setInterval(function() {
 			creepManager.addCreep();
