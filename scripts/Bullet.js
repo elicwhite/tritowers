@@ -1,26 +1,31 @@
 define(["GameVars"], function(GameVars) {
-	return function(startLoc, target, onCollision) {
+	return function(onCollision) {
+		"use strict";
+		var self = this;
+
+		var startLoc;
+		var target;
+
 		var currentX;
 		var currentY;
 
 		var ele;
 
-		var self = this;
-
 		var collision_timer;
 
-		setup();
-
-		this.destroy = function() {
+		self.destroy = function() {
 			clearTimeout(collision_timer);
 			ele.parentNode.removeChild(ele);
 		};
 
-		this.getTarget = function() {
-			return target;
+		self.getTarget = function() {
+			return self.target;
 		};
 
-		function setup() {
+		self.setup = function(startLoc, target) {
+			this.startLoc = startLoc;
+			this.target = target;
+
 			var box = document.getElementById("box");
 			ele = document.createElement("div");
 			ele.className = "bullet";
@@ -38,12 +43,12 @@ define(["GameVars"], function(GameVars) {
 			ele.addEventListener('webkitTransitionEnd', reTarget);
 
 			collision_timer = setInterval(checkCollision, 10);
-		}
+		};
 
 		// Make sure that our target is alive
 
 		function targetDead() {
-			if (!target || !target.isAlive() || !target.getEle()) {
+			if (!self.target || !self.target.isAlive() || !self.target.getEle()) {
 				self.destroy();
 				return true;
 			}
@@ -54,7 +59,7 @@ define(["GameVars"], function(GameVars) {
 		function checkCollision() {
 			if (targetDead()) return;
 
-			var targetEle = target.getEle();
+			var targetEle = self.target.getEle();
 			var targetLoc = getLoc(targetEle);
 			var eleLoc = getLoc(ele);
 
@@ -79,7 +84,7 @@ define(["GameVars"], function(GameVars) {
 		function reTarget() {
 			if (targetDead()) return;
 
-			var targetLoc = getLoc(target.getEle());
+			var targetLoc = getLoc(self.target.getEle());
 
 			var bulletX = (targetLoc.x - currentX);
 			var bulletY = (targetLoc.y - currentY);
