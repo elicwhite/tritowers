@@ -72,7 +72,7 @@ body {
   -webkit-transform: translate(0px, 20px);
 }
 .bullet {
-  -webkit-transition: all .05s linear;
+  -webkit-transition: all 1s linear;
   position: absolute;
   top: 10px;
   left: 10px;

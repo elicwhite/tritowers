@@ -8,7 +8,7 @@ define(["jquery", "Bullet"], function($, Bullet) {
 
     this.initialize = function() {
       // For performance reasons, use the same creep objects.
-      for (var i = 0; i < 20; i++) {
+      for (var i = 0; i < 1000; i++) {
         var bullet = new Bullet(this.freeBullet);
 
         bullet.initialize();
@@ -28,7 +28,6 @@ define(["jquery", "Bullet"], function($, Bullet) {
     };
 
     this.freeBullet = function() {
-      console.log("Bullet Finished");
       remove(this);
     };
 

@@ -13,6 +13,7 @@ define(["GameVars"], function(GameVars) {
 		var ele;
 
 		var collision_timer;
+		var reclaim_timer;
 
 		self.initialize = function() {
 			var box = document.getElementById("box");
@@ -32,16 +33,16 @@ define(["GameVars"], function(GameVars) {
 			currentY = (parts[0] * GameVars.cellSize);
 
 			setTransform();
-
-			//setInterval(reTarget, 300);
 			setTimeout(reTarget, 0);
-			ele.addEventListener('webkitTransitionEnd', reTarget);
-
 			collision_timer = setInterval(checkCollision, 10);
+
+			// Reclaim the bullet after 1 second. Time matches CSS animation
+			reclaim_timer = setTimeout(reclaim, 1000);
 		};
 
 		self.destroy = function() {
 			clearTimeout(collision_timer);
+			clearTimeout(reclaim_timer);
 			freeBullet.call(self);
 		};
 
@@ -60,7 +61,6 @@ define(["GameVars"], function(GameVars) {
 
 		function targetDead() {
 			if (!self.target || !self.target.isAlive() || !self.target.getEle()) {
-				self.destroy();
 				return true;
 			}
 
@@ -106,8 +106,8 @@ define(["GameVars"], function(GameVars) {
 
 			// bulletX and Y are now normalized
 
-			bulletX *= 20;
-			bulletY *= 20;
+			bulletX *= 200;
+			bulletY *= 200;
 
 			currentX += bulletX;
 			currentY += bulletY;
@@ -116,6 +116,10 @@ define(["GameVars"], function(GameVars) {
 
 			setTransform();
 
+		}
+
+		function reclaim() {
+			self.destroy();
 		}
 
 		function setTransform() {

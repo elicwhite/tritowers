@@ -47,7 +47,7 @@ define(["BulletManager", "Bullet"], function(BulletManager, Bullet) {
 
 				var target = closest[1];
 
-				var bullet = BulletManager.instance.takeBullet(loc, target, onCollision);
+				//var bullet = BulletManager.instance.takeBullet(loc, target, onCollision);
 			}
 		}
 
